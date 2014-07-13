@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}DD-CSS About{% endblock %}
+
+{% block page_content %}
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<h2>About</h2>
+
+<p>
+DD-CSS is an <code>open source</code> web application for <code>collection</code> and <code>analysis</code> of social media data. It is built on Flask, a highly modular microframework for Python, to encourage other developers to contribute to this project.
+</p>
+<p>There is a growing interest in mining the social web by so many professions for different purposes. So, while many parties may benefit from DD-CSS, our primary target is computational social scientists.
+</p>
+
+
+<h2>Motivation</h2>
+<p>
+Do you know of any web application that facilitates collection and analysis of social media data? I don't. I indeed know about several tools for social network analysis such as Gephi, Pajek and UCINET (<a href="https://docs.google.com/spreadsheet/ccc?key=0AplklDf0nYxWdFhmTWZUc0o0SzAzMkRuMTZCUVBVeHc">here</a> is a list), however their focus is more on calculation of the network metrics and visualizion of networks. Also they don't have data importer plugins that can directly pull data from social media.
+NodeXL is the only one that I know of but it only works in MS Excel on MS Windows; also its focus is network clustering although there are many kinds of analysis on social media other than that.
+</p>
+
+<p>Computational social science is an inter-disciplinary field. Some researchers are strong in computation and programming while others are much more knowledgable about social science theories and methodologies. Successful research requires both skills. DD-CSS encourages collaboration by its modular architecture which makes programmers add and share their collection and analysis tools easily. This collaboration efforts also help reproducing the experiments of others.</p>
+
+<h2>Your Contribution</h2>
+<p> How can we help social science researchers most efficiently? What are their most prior needs? How should we help grow this project in a healthy way? Do you know any developers who might get interested in this project? Please let me know.</p>
+<p> <a href="http://talhaoz.com">Talha Oz</a></p>
+</div>
+</div>
+
+{% endblock %}
+
+

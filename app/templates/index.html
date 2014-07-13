@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}DD-CSS{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+<!--    <h1>Welcome, {% if current_user.is_authenticated() %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1> -->
+<h1>Collect & Analyze <small>the Social Media Data</small></h1>
+</div> 
+<div class="jumbotron">
+
+        <h2>DD-CSS <small>Data-driven Computational Social Science</small></h2>
+   <p> <abbr title="Data-driven Computational Social Science">DD-CSS</abbr> is an effort to build new computational tools to help <strong>collect</strong> and <strong>analyze</strong> social media data. With the advance of <strong>computational technologies</strong>, new paradigms in the social sciences have emerged. Also, more recently, popularity of <strong>social media platforms</strong> opened new windows for researchers to study human social life, groups, organizations and societies. <a href="{{url_for('main.about') }}">Read more...</a></p>
+       {% if not current_user.is_authenticated() %}
+         <center><p><a class="btn btn-success btn-xl" role="button" href="{{ url_for('auth.register') }}">Register Now</a></p></center>
+       {% endif %}
+</div>
+   
+      <div class="row" >
+        <div class="col-md-4"> <!--style='background-color: #eeffff;'-->
+          <h3>Open-source <span class="mega-octicon octicon-mark-github"></span></h3>
+          <p > Distinctive feature of <abbr title="Data-driven Computational Social Science">DD-CSS</abbr> is that it is built scientific purposes in mind, not marketing. Well-respected published algorithms are to be implemented and <strong>shared</strong>. <abbr title="Data-driven Computational Social Science">DD-CSS</abbr> is of the community, by the community, and for the community. </p>
+       </div>
+       
+        <div class="col-md-4"> <!--style='background-color: #ffecff;'-->
+          <h3>Observatory <span class="mega-octicon octicon-telescope"></span></h3>
+          <p >Helping social scientists and other interested parties <strong>collect</strong> social data for successful observation is our existential cause. We are well aware of how critical and crucial this process is as every theory is based on observations.</p>
+        </div>
+        
+        <div class="col-md-4"> <!--style='background-color: #eeffee;'-->
+          <h3>Laboratory <span class="mega-octicon octicon-graph"></span></h3>
+     <p > Collected data need to be carefully measured and analyzed for theory formation and testing. We develop tools for sensitive <strong>measurement</strong> and in-depth <strong>analysis</strong>. <abbr title="Data-driven Computational Social Science">DD-CSS</abbr> is not yet another media analytics store, it is a laboratory. </p>
+        </div>
+      
+   </div>
+
+{% endblock %}
+
+

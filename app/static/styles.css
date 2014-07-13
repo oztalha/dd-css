@@ -1,0 +1,15 @@
+body { padding-top: 70px; }
+
+.profile-thumbnail {
+    position: absolute;
+}
+.profile-header {
+    min-height: 260px;
+    margin-left: 280px;
+}
+
+.btn-xl {
+    padding: 14px 24px;
+    font-size: 21px;
+    border-radius: 6px;
+}
