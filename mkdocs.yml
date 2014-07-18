@@ -1,0 +1,19 @@
+site_name: 'DD-CSS'
+site_url: 'http://dd-css.com/'
+site_description: Project documentation with Markdown.
+site_author: Talha Oz
+
+docs_dir: Documents
+site_dir: docs
+repo_url: https://github.com/oztalha/dd-css/
+
+pages:
+- [index.md, About]
+- [features.md, Features]
+- [user-guide.md, User Guide]
+- [license.md, License]
+
+theme: '/dd-css/docs_theme'
+#theme: mkdocs
+
+copyright: Copyright &copy; 2014, <a href="https://twitter.com/tozCSS">Talha Oz</a>.

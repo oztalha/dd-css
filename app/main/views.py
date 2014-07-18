@@ -19,9 +19,9 @@ def after_request(response):
     return response
 
 
-@main.route('/about')
+@main.route('/docs')
 def about():
-    return render_template('about.html')
+    return redirect('docs/')
 
 @main.route('/')
 def index():
