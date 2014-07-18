@@ -1,4 +1,4 @@
-#The legal stuff
+#License
 ---
 ##The MIT License (MIT)
 

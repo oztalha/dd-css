@@ -10,7 +10,7 @@ repo_url: https://github.com/oztalha/dd-css/
 pages:
 - [index.md, About]
 - [features.md, Features]
-- [user-guide.md, User Guide]
+- [get-involved.md, Get Involved]
 - [license.md, License]
 
 theme: '/dd-css/docs_theme'

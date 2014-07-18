@@ -104,7 +104,7 @@ def getFollowers(screen_name,followers_limit):
     except:
         followers_ids = get_followers_ids(twitter_api, screen_name=screen_name)
 
-    save_csv("../followers.csv",followers_ids)
+    #save_csv("followers.csv",followers_ids)
     return ','.join((str(n) for n in followers_ids))
 
 def save_csv(mypath,mylist):
