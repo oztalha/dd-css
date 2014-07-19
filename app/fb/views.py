@@ -10,6 +10,7 @@ from flask_oauth import OAuthException
 from .forms import FollowersForm
 import facebook
 from flask import make_response
+from flask.ext.login import login_required
 
 facebook = oauth.remote_app('facebook',
     app_key='FACEBOOK'
@@ -22,6 +23,7 @@ def before_request():
         g.user = session['facebook_oauth']
 
 @fb.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     if g.user is not None:
         fform = FollowersForm()

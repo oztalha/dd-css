@@ -48,7 +48,7 @@ def create_app(config_name):
     from .tw import tw as tw_blueprint
     app.register_blueprint(tw_blueprint, url_prefix='/tw')
 
-    from .fb import tw as fb_blueprint
+    from .fb import fb as fb_blueprint
     app.register_blueprint(fb_blueprint, url_prefix='/fb')
 #    from .api_1_0 import api as api_1_0_blueprint
 #    app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
