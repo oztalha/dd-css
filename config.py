@@ -13,7 +13,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     DD_CSS_MAIL_SUBJECT_PREFIX = '[DD-CSS]'
-    DD_CSS_MAIL_SENDER = 'DD-CSS Admin <sadece@gmail.com>'
+    DD_CSS_MAIL_SENDER = 'DD-CSS Admin <feyzagalip@gmail.com>'
     DD_CSS_ADMIN = os.environ.get('DD_CSS_ADMIN')
     DD_CSS_SLOW_DB_QUERY_TIME=0.5
 
@@ -24,6 +24,16 @@ class Config:
         request_token_url='https://api.twitter.com/oauth/request_token',
         access_token_url='https://api.twitter.com/oauth/access_token',
         authorize_url='https://api.twitter.com/oauth/authenticate'
+    )
+
+    FACEBOOK = dict(
+        base_url='https://graph.facebook.com/',
+    	request_token_url=None,
+    	access_token_url='/oauth/access_token',
+    	authorize_url='https://www.facebook.com/dialog/oauth',
+    	consumer_key=os.environ.get('FACEBOOK_CONSUMER_KEY'),
+    	consumer_secret=os.environ.get('FACEBOOK_CONSUMER_SECRET'),
+    	request_token_params={'scope': 'email'}
     )
 
     @staticmethod
