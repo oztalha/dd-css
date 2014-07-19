@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}DD-CSS - Facebook{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Facebook number of shares</h1>
+</div>
+<div>
+<ul>
+{% if resp.data[url] is defined %}
+	<li>ID: {{ resp.data[url]['id'] }}</li>
+	<li>SHARES: {{ resp.data[url]['shares'] }}</li>
+{% elif resp.data['error'] is defined %}
+	<li>ERROR MESSAGE: {{ resp.data['error']['message'] }}</li>
+	<li>ERROR TYPE: {{ resp.data['error']['type'] }}</li>
+	<li>ERROR CODE: {{ resp.data['error']['code'] }}</li>
+{% else %}
+	THERE IS NO FACEBOOK SHARE FOR THIS SITE
+</ul>
+{% endif %}
+</div>
+{% endblock %}
