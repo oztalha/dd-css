@@ -8,7 +8,39 @@
 <div class="page-header">
     <h1>Twitter Data Collection and Analysis</h1>
 </div>
-<div class="col-md-4">
-    {{ wtf.quick_form(fform) }}
+
+<div class="row">
+ <div class="col-md-6">
+  <div class="panel panel-info">
+     <div class="panel-heading">Collect Twitter Data</div>
+    <div class="list-group">
+       <a href="{{ url_for('tw.friends_followers') }}" class="list-group-item">
+         <h4 class="list-group-item-heading">Get IDs of Friends and Followers</h4>
+         <p class="list-group-item-text">You can download up to 75K IDs in a second</p>
+       </a>
+       <a href="#" class="list-group-item disabled">
+         <h4 class="list-group-item-heading" style="color: #999999">New Features</h4>
+         <p class="list-group-item-text">Please contact us and ask for new features</p>
+       </a>
+    </div>
+  </div>
+ </div>
+
+ <div class="col-md-6">
+  <div class="panel panel-success ">
+    <div class="panel-heading">Analyze Twitter Data</div>
+    <div class="list-group">
+       <a href="#" class="list-group-item">
+         <h4 class="list-group-item-heading">Analysis functions will be listed here</h4>
+         <p class="list-group-item-text">Application of methods in social network theory and computational linguistics</p>
+       </a>
+       <a href="#" class="list-group-item disabled">
+         <h4 class="list-group-item-heading" style="color: #999999">New Features</h4>
+         <p class="list-group-item-text">Please contact us and ask for new features</p>
+       </a>
+    </div>
+  </div>
+ </div>
 </div>
+
 {% endblock %}

@@ -35,35 +35,21 @@ def before_request():
 @tw.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
+    return render_template('tw/index.html')
+
+
+@tw.route('/friends-followers', methods=['GET', 'POST'])
+@login_required
+def friends_followers():
     tweets = None
     if g.user is not None:
         fform = FollowersForm()
         if fform.validate_on_submit():
-            res = getFollowers(fform.screen_name.data, fform.followers_limit.data)
+            res = getFollowers(fform.screen_name.data, fform.friends_limit.data, fform.followers_limit.data)
             response = make_response(res)
             response.headers["Content-Disposition"] = "attachment; filename=followers.csv"
             return response #return redirect(request.args.get('next') or url_for('tw.index'))
-    return render_template('tw/index.html', fform=fform)
-
-
-@tw.route('/tweet', methods=['POST'])
-@login_required
-def tweet():
-    if g.user is None:
-        return redirect(url_for('tw.login', next=request.url))
-    status = request.form['tweet']
-    if not status:
-        return redirect(url_for('index'))
-    resp = twitter.post('statuses/update.json', data={
-        'status': status
-    })
-    if resp.status == 403:
-        flash('Your tweet was too long.')
-    elif resp.status == 401:
-        flash('Authorization error with Twitter.')
-    else:
-        flash('Successfully tweeted your tweet (ID: #%s)' % resp.data['id'])
-    return redirect(url_for('tw.index'))
+    return render_template('tw/friends-followers.html', fform=fform)
 
 
 @tw.route('/login')
@@ -97,15 +83,19 @@ def oauth_login():
     twitter_api = t.Twitter(auth=auth)
     return twitter_api
  
-def getFollowers(screen_name,followers_limit):
+def getFollowers(screen_name,friends_limit,followers_limit):
     twitter_api = oauth_login()
-    try:
-        followers_ids = get_followers_ids(twitter_api, screen_name=screen_name, followers_limit=int(followers_limit))
-    except:
-        followers_ids = get_followers_ids(twitter_api, screen_name=screen_name)
+    friends_ids, followers_ids = get_friends_followers_ids(twitter_api, screen_name=screen_name, friends_limit=int(friends_limit), followers_limit=int(followers_limit))
 
     #save_csv("followers.csv",followers_ids)
-    return ','.join((str(n) for n in followers_ids))
+    if int(friends_limit) == 0 and int(followers_limit) == 0:
+        flash('At least one of the limits should be greater than zero')
+        return redirect(url_for('tw.friends_followers'))
+
+    if int(friends_limit) == 0:
+        return ','.join(str(n) for n in followers_ids)
+
+    return '\n'.join((','.join((str(n) for n in friends_ids)), ','.join(str(n) for n in followers_ids)))
 
 def save_csv(mypath,mylist):
     myfile = open(mypath, 'wb')
