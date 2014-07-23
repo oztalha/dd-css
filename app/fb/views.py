@@ -25,14 +25,19 @@ def before_request():
 @fb.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
+    return render_template('fb/index.html')
+
+@fb.route('/number_of_shares', methods=['GET', 'POST'])
+@login_required
+def number_of_shares():
     if g.user is not None:
         fform = FollowersForm()
 	if fform.validate_on_submit():
 		url=fform.url_name.data
 		q='?ids='+url
 		resp = facebook.get(q)
-		return render_template('fb/result.html', resp=resp, url=url )
-    	return render_template('fb/index.html', fform = fform)
+		return render_template('fb/result_shares.html', resp=resp, url=url )
+    	return render_template('fb/number_of_shares.html', fform = fform)
 
 
 @fb.route('/login')
