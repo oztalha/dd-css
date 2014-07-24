@@ -10,7 +10,7 @@
 
 ## Facebook
 ###Collection
-* Get the friends of a user as a CSV file
+* Get the number of shares of a url
 ###Analysis
 * Check back soon !
 ### Other

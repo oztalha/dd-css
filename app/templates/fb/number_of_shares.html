@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!-- {% import '_macros.html' as macros %} -->
+
+{% block title %}DD-CSS - Facebook{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Facebook Data Collection and Analysis</h1>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(fform) }}
+</div>
+{% endblock %}
