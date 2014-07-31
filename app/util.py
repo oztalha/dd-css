@@ -43,8 +43,10 @@ def save_to_mongo(data, mongo_db, mongo_db_coll, save = True, manipulate=True ,*
     coll = db[mongo_db_coll]
     
     # Perform a bulk insert and  return the IDs
-    
-    return coll.insert(data)
+    if(save):
+        return coll.save(data)
+    else:
+        return coll.insert(data)
 
 def load_from_mongo(mongo_db, mongo_db_coll, return_cursor=False,
                     criteria=None, projection=None, **mongo_conn_kw):

@@ -204,8 +204,8 @@ def get_friends_followers_ids(twitter_api, screen_name=None, user_id=None,
     ff['parameters']['friends_limit'] = friends_limit
     ff['parameters']['followers_limit'] = followers_limit
     ff['data'] = defaultdict(list)
-    print "in get_friends_followers_ids"
-    print ff
+
+    id = False #dummy id initialization for mongodb save
     for twitter_api_func, limit, ids, label in [
                     [get_friends_ids, friends_limit, friends_ids, "friends"], 
                     [get_followers_ids, followers_limit, followers_ids, "followers"]
@@ -233,7 +233,7 @@ def get_friends_followers_ids(twitter_api, screen_name=None, user_id=None,
             # an additional layer of protection from exceptional circumstances
             ff['data'][label] = ids
             #save_json("ff",ff)
-            save_to_mongo(ff,"ddcss","queries")
+            id = save_to_mongo(ff,"ddcss","queries")
             #mongo_reloaded = load_from_mongo("ddcss","queries")
             #print mongo_reloaded
             #print dumps(mongo_reloaded, ensure_ascii=False)
