@@ -54,3 +54,6 @@ tmp
 
 # MkDocs generated static files
 docs
+
+#downloads folder
+download/

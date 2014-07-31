@@ -5,10 +5,15 @@
 {% block title %}DD-CSS - Facebook{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Facebook Data Collection and Analysis</h1>
+<div class="row centered-form">
+<div class="col-md-4 col-md-offset-4">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Get IDs of Open Graph Object URLs</h3>
+    </div>
+    <div class="panel-body">
+      {{ wtf.quick_form(fform) }}
+    </div>
 </div>
-<div class="col-md-4">
-    {{ wtf.quick_form(fform) }}
 </div>
 {% endblock %}

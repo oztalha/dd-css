@@ -25,4 +25,34 @@
         </p>
     </div>
 </div>
+{% if user == current_user %}
+  <div class="panel panel-default">
+    <div class="panel-heading">My Queries</div>
+    <table class="table table-hover">
+    <thead>
+     <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Parameters</th>
+      <th>Time</th>
+      <th>Download</th>
+     </tr>
+    </thead>
+    {% for query in queries %}
+    <tr>
+        <td>{{loop.index}}</td>
+        <td>{{query.qname}} </td>
+        <td>[{% for key, value in query.parameters.iteritems() %}
+              { {{key}} : {{value}} }
+            {% endfor %}]
+        </td>
+        <td>{{query.created_time}} </td>
+        <td><a href={{ url_for('main.download',file_id= query._id) }} class="mega-octicon octicon-cloud-download"></a> </td>
+    </tr>
+    {% endfor %}
+    </table>
+  </div>
+{% else %}
+<p> You are not allowed to see others' queries.</p>
+{% endif %}
 {% endblock %}

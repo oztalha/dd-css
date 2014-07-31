@@ -6,7 +6,8 @@ from . import main
 from .forms import EditProfileForm
 from .. import db
 from ..models import User
-
+from ..util import load_from_mongo
+from ..util import get_file_params
 
 @main.after_app_request
 def after_request(response):
@@ -37,11 +38,22 @@ def server_shutdown():
     shutdown()
     return 'Shutting down...'
 
+"""
+@main.route('/user/<username>/<id>')
+def download(id,username):
+    queries = load_from_mongo("ddcss","queries", criteria={"id" : id}, projection = {"username": 0} )
+    return queries # as a response
+"""
 
+@login_required
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
+    if current_user.username == username:
+        queries = load_from_mongo("ddcss","queries", criteria={"username" : current_user.username}, projection = {"data": 0} )
+    else:
+        queries = None
+    return render_template('user.html', user=user, queries=queries)
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
@@ -60,3 +72,15 @@ def edit_profile():
     form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form)
 
+
+@main.route('/query/<file_id>')
+def download(file_id):
+    (file_basename, server_path, file_size) = get_file_params(file_id)
+    response = make_response()
+    response.headers['Content-Description'] = 'File Transfer'
+    response.headers['Cache-Control'] = 'no-cache'
+    response.headers['Content-Type'] = 'application/octet-stream'
+    response.headers['Content-Disposition'] = 'attachment; filename=%s' % file_basename
+    response.headers['Content-Length'] = file_size
+    response.headers['X-Accel-Redirect'] = server_path # nginx: http://wiki.nginx.org/NginxXSendfile
+    return response
