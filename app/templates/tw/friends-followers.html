@@ -6,7 +6,7 @@
 
 {% block page_content %}
 <div class="row centered-form">
-<div class="col-md-4 col-md-offset-4">
+ <div class="col-md-4 col-md-offset-1">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Get IDs of Friends and Followers</h3>
@@ -14,6 +14,26 @@
     <div class="panel-body">
       {{ wtf.quick_form(fform) }}
     </div>
-</div>
+  </div>
+ </div>
+ <div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">About</h3>
+    </div>
+    <div class="panel-body">
+      <p class="lead"> You can download all follower/friend IDs of a tweep</p> 
+      <p> After submitting your request you can get the results immediately,
+      or based on your authenticated account status you might have to wait. </p>
+
+      <p> Due to Twitter rate limiting policy (15 API calls per 15 minutes window limit),
+      there is no way to fetch all the friends/followers of a user
+      that exceeds 75,000 ids (15 times the max amount of ids per cursor [5000]) without having to wait 15 minutes. </p>
+
+      <p> Our database is updated as Twitter allows your account to fetch the remaining follower ids.
+      So, if you are collecting 750K ids, you should visit your profile page 150 minutes later to download all.</p>
+    </div>
+  </div>
+ </div>
 </div>
 {% endblock %}
