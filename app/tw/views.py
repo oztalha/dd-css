@@ -18,6 +18,9 @@ from collections import defaultdict
 from bson.json_util import dumps
 from datetime import datetime
 from ..util import save_to_mongo
+import time
+from threading import Thread
+from flask import copy_current_request_context
 
 twitter = oauth.remote_app(    
      'twitter',
@@ -44,6 +47,7 @@ def index():
     return render_template('tw/index.html')
 
 
+
 @tw.route('/friends-followers', methods=['GET', 'POST'])
 @login_required
 def friends_followers():
@@ -52,7 +56,14 @@ def friends_followers():
         fform = FollowersForm()
         if fform.validate_on_submit():
             flash("Your request is received, you can download the results here when its completed")
-            res = getFollowers(fform.screen_name.data, fform.friends_limit.data, fform.followers_limit.data)
+            
+            @copy_current_request_context
+            def getFollowers_async(screen_name,friends_limit,followers_limit):
+                    getFollowers(screen_name,friends_limit,followers_limit)
+
+            thr = Thread(target=getFollowers_async, args=[fform.screen_name.data, fform.friends_limit.data, fform.followers_limit.data])
+            thr.start()
+            #res = getFollowers(fform.screen_name.data, fform.friends_limit.data, fform.followers_limit.data)
             return redirect(url_for('main.user', username=current_user.username))
             #response = make_response(res)
             #response.headers["Content-Disposition"] = "attachment; filename=followers.csv"
@@ -90,21 +101,15 @@ def oauth_login():
     auth = t.oauth.OAuth(tok, tos, twitter.consumer_key, twitter.consumer_secret)
     twitter_api = t.Twitter(auth=auth)
     return twitter_api
- 
-def getFollowers(screen_name,friends_limit,followers_limit):
-    twitter_api = oauth_login()
-    print "before get_friends_followers_ids"
-    friends_ids, followers_ids = get_friends_followers_ids(twitter_api, screen_name=screen_name, friends_limit=int(friends_limit), followers_limit=int(followers_limit))
 
-    #save_csv("followers.csv",followers_ids)
+
+def getFollowers(screen_name,friends_limit,followers_limit):
     if int(friends_limit) == 0 and int(followers_limit) == 0:
         flash('At least one of the limits should be greater than zero')
         return redirect(url_for('tw.friends_followers'))
+    twitter_api = oauth_login()
+    friends_ids, followers_ids = get_friends_followers_ids(twitter_api, screen_name=screen_name, friends_limit=int(friends_limit), followers_limit=int(followers_limit))
 
-    if int(friends_limit) == 0:
-        return ','.join(str(n) for n in followers_ids)
-
-    return '\n'.join((','.join((str(n) for n in friends_ids)), ','.join(str(n) for n in followers_ids)))
 
 def save_csv(mypath,mylist):
     myfile = open(mypath, 'wb')
@@ -158,7 +163,7 @@ def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw):
     while True:
         try:
             return twitter_api_func(*args, **kw)
-        except twitter.api.TwitterHTTPError, e:
+        except t.api.TwitterHTTPError, e:
             error_count = 0 
             wait_period = handle_twitter_http_error(e, wait_period)
             if wait_period is None:
@@ -205,7 +210,6 @@ def get_friends_followers_ids(twitter_api, screen_name=None, user_id=None,
     ff['parameters']['followers_limit'] = followers_limit
     ff['data'] = defaultdict(list)
 
-    id = False #dummy id initialization for mongodb save
     for twitter_api_func, limit, ids, label in [
                     [get_friends_ids, friends_limit, friends_ids, "friends"], 
                     [get_followers_ids, followers_limit, followers_ids, "followers"]
@@ -233,6 +237,8 @@ def get_friends_followers_ids(twitter_api, screen_name=None, user_id=None,
             # an additional layer of protection from exceptional circumstances
             ff['data'][label] = ids
             #save_json("ff",ff)
+            print "ids size"
+            print len(ids)
             id = save_to_mongo(ff,"ddcss","queries")
             #mongo_reloaded = load_from_mongo("ddcss","queries")
             #print mongo_reloaded

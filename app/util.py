@@ -8,16 +8,15 @@ from flask import current_app
 
 def get_file_params(filename):
     filepath = os.path.abspath(current_app.root_path)+"/../download/"+filename
-    print filepath
-    if os.path.isfile(filepath):
-        return filename,"/download/"+filename,os.path.getsize(filepath)
+    #print filepath
+    #if os.path.isfile(filepath):
+    #    return filename,"/download/"+filename,os.path.getsize(filepath)
     with open(filepath, 'w') as outfile:
         data = load_from_mongo("ddcss","queries",\
-            criteria = {"_id" : ObjectId(filename)}, projection = {'_id': 0}) 
-        print data[0]
+            criteria = {"_id" : ObjectId(filename)}, projection = {'_id': 0})
         #outfile.write(json.dumps(data[0], default=json_util.default))
         outfile.write(dumps(data[0]))
-    print os.path.getsize(filepath)    
+    #print os.path.getsize(filepath)    
     return filename, "/download/"+filename, os.path.getsize(filepath)
 
 def save_json(filename, data):
