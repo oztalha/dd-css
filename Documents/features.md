@@ -2,7 +2,7 @@
 -----------
 ## Twitter
 ###Collection
-* Get the followers of a user as a CSV file
+* Download IDs of all of the friends and/or followers of a Twitter user, or set a limit
 ###Analysis
 * Check back soon !
 ### Other

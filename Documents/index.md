@@ -1,7 +1,8 @@
 #About DD-CSS
 ---
-DD-CSS is an open source web application initiated by [Talha Oz][toz] to help researchers collect data from social media platforms such as Twitter and Facebook and analyze them.
+DD-CSS is an open source web application to help researchers collect data from social media platforms such as Twitter, and analyze them.
 It is powered by Flask, a highly modular microframework for Python.
+DD-CSS is initiated by [Talha Oz][toz].
 
 ##Motivation
 

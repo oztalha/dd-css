@@ -45,8 +45,8 @@ def download(id,username):
     return queries # as a response
 """
 
-@login_required
 @main.route('/user/<username>')
+@login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     if current_user.username == username:
