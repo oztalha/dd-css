@@ -7,7 +7,7 @@ from flask.ext.login import login_required
 from flask.ext.login import current_user
 from . import tw
 from .. import oauth
-from .forms import FollowersForm
+from .forms import FollowersForm, UserTimelineForm
 import twitter as t
 import json
 from functools import partial
@@ -46,6 +46,103 @@ def before_request():
 def index():
     return render_template('tw/index.html')
 
+
+
+@tw.route('/user-timeline', methods=['GET', 'POST'])
+@login_required
+def user_timeline():
+    tweets = None
+    if g.user is not None:
+        form = UserTimelineForm()
+        if form.validate_on_submit():
+            flash("Your request is received, you can download the results here when its completed")
+            
+            @copy_current_request_context
+            def harvest_user_timeline_async(screen_name,max_results):
+            	twitter_api = oauth_login()
+            	harvest_user_timeline(twitter_api,screen_name=screen_name,max_results=int(max_results))
+            
+            thr = Thread(target=harvest_user_timeline_async, args=[form.screen_name.data, form.max_results.data])
+            thr.start()
+            return redirect(url_for('main.user', username=current_user.username))
+    return render_template('tw/user-timeline.html', form=form)
+
+
+def harvest_user_timeline(twitter_api, screen_name=None, user_id=None, max_results=1000):
+     
+    assert (screen_name != None) != (user_id != None), \
+    "Must have screen_name or user_id, but not both"    
+    
+    ff = defaultdict()
+    ff['qname'] = 'Twitter User Timeline'
+    ff['created_time'] = datetime.now()
+    ff['username'] = current_user.username
+    ff['parameters'] = defaultdict()
+    ff['parameters']['screen_name'] = screen_name if screen_name else user_id
+    ff['parameters']['max_results'] = max_results
+    ff['data'] = defaultdict(list)
+
+
+    kw = {  # Keyword args for the Twitter API call
+        'count': 200,
+        'trim_user': 'true',
+        'include_rts' : 'true',
+        'since_id' : 1
+        }
+    
+    if screen_name:
+        kw['screen_name'] = screen_name
+    else:
+        kw['user_id'] = user_id
+        
+    max_pages = 16
+    results = []
+    
+    tweets = make_twitter_request(twitter_api.statuses.user_timeline, **kw)
+    
+    if tweets is None: # 401 (Not Authorized) - Need to bail out on loop entry
+        tweets = []
+        
+    results += tweets
+    
+    print >> sys.stderr, 'Fetched %i tweets' % len(tweets)
+    
+    page_num = 1
+    
+    # Many Twitter accounts have fewer than 200 tweets so you don't want to enter
+    # the loop and waste a precious request if max_results = 200.
+    
+    # Note: Analogous optimizations could be applied inside the loop to try and 
+    # save requests. e.g. Don't make a third request if you have 287 tweets out of 
+    # a possible 400 tweets after your second request. Twitter does do some 
+    # post-filtering on censored and deleted tweets out of batches of 'count', though,
+    # so you can't strictly check for the number of results being 200. You might get
+    # back 198, for example, and still have many more tweets to go. If you have the
+    # total number of tweets for an account (by GET /users/lookup/), then you could 
+    # simply use this value as a guide.
+    
+    if max_results == kw['count']:
+        page_num = max_pages # Prevent loop entry
+    
+    while page_num < max_pages and len(tweets) > 0 and len(results) < max_results:
+    
+        # Necessary for traversing the timeline in Twitter's v1.1 API:
+        # get the next query's max-id parameter to pass in.
+        # See https://dev.twitter.com/docs/working-with-timelines.
+        kw['max_id'] = min([ tweet['id'] for tweet in tweets]) - 1 
+    
+        tweets = make_twitter_request(twitter_api.statuses.user_timeline, **kw)
+        results += tweets
+        ff['data'] = results
+        id = save_to_mongo(ff,"ddcss","queries")
+
+        print >> sys.stderr, 'Fetched %i tweets' % (len(tweets),)
+    
+        page_num += 1
+        
+    print >> sys.stderr, 'Done fetching tweets'
+    return results[:max_results]
+    
 
 
 @tw.route('/friends-followers', methods=['GET', 'POST'])
