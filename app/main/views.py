@@ -54,7 +54,7 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     queries = None
     if is_accessible(username):
-        queries = load_from_mongo("ddcss","queries", criteria={"username" : current_user.username}, projection = {"data": 0}, sorting = ("created_time", -1) )
+        queries = load_from_mongo("ddcss","queries", criteria={"username" : username}, projection = {"data": 0}, sorting = ("created_time", -1) )
     return render_template('user.html', user=user, queries=queries)
 
 
