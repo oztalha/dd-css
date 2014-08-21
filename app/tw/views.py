@@ -150,22 +150,22 @@ def harvest_user_timeline(twitter_api, screen_name=None, user_id=None, max_resul
 def friends_followers():
     tweets = None
     if g.user is not None:
-        fform = FollowersForm()
-        if fform.validate_on_submit():
+        form = FollowersForm()
+        if form.validate_on_submit():
             flash("Your request is received, you can download the results here when its completed")
             
             @copy_current_request_context
             def getFollowers_async(screen_name,friends_limit,followers_limit):
                     getFollowers(screen_name,friends_limit,followers_limit)
 
-            thr = Thread(target=getFollowers_async, args=[fform.screen_name.data, fform.friends_limit.data, fform.followers_limit.data])
+            thr = Thread(target=getFollowers_async, args=[form.screen_name.data, form.friends_limit.data, form.followers_limit.data])
             thr.start()
-            #res = getFollowers(fform.screen_name.data, fform.friends_limit.data, fform.followers_limit.data)
+            #res = getFollowers(form.screen_name.data, form.friends_limit.data, form.followers_limit.data)
             return redirect(url_for('main.user', username=current_user.username))
             #response = make_response(res)
             #response.headers["Content-Disposition"] = "attachment; filename=followers.csv"
             #return response #return redirect(request.args.get('next') or url_for('tw.index'))
-    return render_template('tw/friends-followers.html', fform=fform)
+    return render_template('tw/friends-followers.html', form=form)
 
 
 @tw.route('/login')
@@ -207,11 +207,6 @@ def getFollowers(screen_name,friends_limit,followers_limit):
     twitter_api = oauth_login()
     friends_ids, followers_ids = get_friends_followers_ids(twitter_api, screen_name=screen_name, friends_limit=int(friends_limit), followers_limit=int(followers_limit))
 
-
-def save_csv(mypath,mylist):
-    myfile = open(mypath, 'wb')
-    wr = csv.writer(myfile, quoting=csv.QUOTE_MINIMAL)
-    wr.writerow(mylist)
 
 def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw): 
     

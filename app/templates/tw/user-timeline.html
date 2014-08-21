@@ -1,33 +1,15 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-<!-- {% import '_macros.html' as macros %} -->
+{% import '_macros.html' as macros %}
 
 {% block title %}DD-CSS - Twitter{% endblock %}
 
 {% block page_content %}
-<div class="row centered-form">
- <div class="col-md-4 col-md-offset-1">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Get Tweets from User Timeline</h3>
-    </div>
-    <div class="panel-body">
-      {{ wtf.quick_form(form) }}
-    </div>
-  </div>
- </div>
- <div class="col-md-6">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">About</h3>
-    </div>
-    <div class="panel-body">
-      <p class="lead"> You can download up to 3200 last tweets of a user</p> 
-      <p> After submitting your request you can get the results immediately,
-      or based on your authenticated account status you might have to wait. </p>
 
-    </div>
-  </div>
- </div>
-</div>
+ {{ macros.form_in_panel(form,"Get Tweets from User Timeline") }}
+ {{ macros.about_in_panel("About",
+      "You can download up to 3200 last tweets of a user",
+      "After submitting your request you can get the results immediately,
+      or based on your authenticated account status you might have to wait.") }}
+
 {% endblock %}

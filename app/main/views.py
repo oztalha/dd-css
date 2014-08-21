@@ -45,14 +45,16 @@ def download(id,username):
     return queries # as a response
 """
 
+def is_accessible(username):
+    return current_user.username == username or current_user.get_id() == u'1'
+
 @main.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    if current_user.username == username:
-        queries = load_from_mongo("ddcss","queries", criteria={"username" : current_user.username}, projection = {"data": 0} )
-    else:
-        queries = None
+    queries = None
+    if is_accessible(username):
+        queries = load_from_mongo("ddcss","queries", criteria={"username" : current_user.username}, projection = {"data": 0}, sorting = ("created_time", -1) )
     return render_template('user.html', user=user, queries=queries)
 
 
@@ -75,7 +77,8 @@ def edit_profile():
 
 @main.route('/query/<file_id>')
 def download(file_id):
-    (file_basename, server_path, file_size) = get_file_params(file_id)
+    fformat = request.args.get('fformat')
+    (file_basename, server_path, file_size) = get_file_params(file_id, fformat)
     response = make_response()
     response.headers['Content-Description'] = 'File Transfer'
     response.headers['Cache-Control'] = 'no-cache'
