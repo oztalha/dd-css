@@ -2,7 +2,8 @@
 -----------
 ## Twitter
 ###Collection
-* Download IDs of all of the friends and/or followers of a Twitter user, or set a limit
+* Get the friends/followers list of a user as JSON/CSV file
+* Get last 3200 tweets of a user in JSON/CSV format
 ###Analysis
 * Check back soon !
 ### Other
