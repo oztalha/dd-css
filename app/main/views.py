@@ -8,6 +8,8 @@ from .. import db
 from ..models import User
 from ..util import load_from_mongo
 from ..util import get_file_params
+from ..util import remove_from_mongo
+from bson.objectid import ObjectId
 
 @main.after_app_request
 def after_request(response):
@@ -76,6 +78,7 @@ def edit_profile():
 
 
 @main.route('/query/<file_id>')
+@login_required
 def download(file_id):
     fformat = request.args.get('fformat')
     (file_basename, server_path, file_size) = get_file_params(file_id, fformat)
@@ -87,3 +90,11 @@ def download(file_id):
     response.headers['Content-Length'] = file_size
     response.headers['X-Accel-Redirect'] = server_path # nginx: http://wiki.nginx.org/NginxXSendfile
     return response
+
+@main.route('/remove/<file_id>')
+@login_required
+def remove(file_id):
+    remove_from_mongo("ddcss","queries", criteria={"_id" : ObjectId(file_id)})
+    flash('Your query has been removed.')
+    return redirect(url_for('.user', username=current_user.username))
+

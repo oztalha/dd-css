@@ -110,6 +110,21 @@ def load_from_mongo(mongo_db, mongo_db_coll, return_cursor=False,
         return [ item for item in cursor ]
 
 
+def remove_from_mongo(mongo_db, mongo_db_coll, criteria=None,
+                    projection=None, sorting = None, **mongo_conn_kw):
+        
+    client = pymongo.MongoClient(**mongo_conn_kw)
+    db = client[mongo_db]
+    coll = db[mongo_db_coll]
+    if criteria is None:
+        criteria = {}
+    
+    if projection is None:
+        cursor = coll.remove(criteria)    
+
+    return cursor
+
+
 class UnicodeWriter:
     """
     A CSV writer which will write rows to CSV file "f",

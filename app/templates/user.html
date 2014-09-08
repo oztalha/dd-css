@@ -36,6 +36,7 @@
       <th>Parameters</th>
       <th>Time</th>
       <th>Download</th>
+      <th>Remove</th>
      </tr>
     </thead>
     {% for query in queries %}
@@ -54,6 +55,8 @@
            <li><a href={{ url_for('main.download',file_id= query._id, fformat= "csv") }}> CSV (Fundamentals) </a></li>
           </ul>
         </div></td>
+        <td><a href={{ url_for('main.remove',file_id= query._id) }} class="mega-octicon octicon-x"></a></td>
+
         
     </tr>
     {% endfor %}
