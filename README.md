@@ -2,7 +2,7 @@
 ---------
 ## Data-driven Computational Social Science
 
-DD-CSS is an effort to build new computational tools to help collect and analyze social media data.
+DD-CSS ([dd-css.com](http://dd-css.com)) is an effort to build new computational tools to help collect and analyze social media data.
 It is powered by Flask, a highly modular microframework for Python, to encourage other developers to contribute to this project.
 
 There is a growing interest in mining the social web by so many professions for different purposes.
