@@ -2,13 +2,11 @@
 ---------
 ## Data-driven Computational Social Science
 
-DD-CSS ([dd-css.com](http://dd-css.com)) is an effort to build new computational tools to help collect and analyze social media data.
-It is powered by Flask, a highly modular microframework for Python, to encourage other developers to contribute to this project.
+[DD-CSS](http://dd-css.com) is an open source web application that helps collecting data from social media platforms such as Twitter, and analyze them.
+It is powered by Flask, a highly modular microframework for Python.
+DD-CSS is initiated by [Talha Oz][toz].
 
-There is a growing interest in mining the social web by so many professions for different purposes.
-So, while many parties may benefit from DD-CSS, our primary target is computational social scientists.
-We would like you to import your collection & analysis methods into DD-CSS especially if you are publishing in [social computing conferences](http://www.mli.gmu.edu/toz/wordpress/2014/05/26/social-computing-conferences/).
-
+In this project I highly benefitted from the books [Mining the Social Web](https://github.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition) and [Flask Web Development](https://github.com/miguelgrinberg/flasky).
 
 ## Features
 -----------
@@ -24,4 +22,4 @@ We would like you to import your collection & analysis methods into DD-CSS espec
 ## Installation
 ---------------
 ### MongoDB
-* db.queries.ensureIndex({username:1, created_time:1, qname:1})
+* Index the queries by db.queries.ensureIndex({username:1, created_time:1, qname:1})
