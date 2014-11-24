@@ -23,3 +23,5 @@ In this project I highly benefitted from the books [Mining the Social Web](https
 ---------------
 ### MongoDB
 * Index the queries by db.queries.ensureIndex({username:1, created_time:1, qname:1})
+ 
+[toz]: http://www.mli.gmu.edu/toz/wordpress
