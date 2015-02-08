@@ -32,7 +32,12 @@ def get_file_params(filebasename, fformat):
                 status_texts = [ (unicode('"'+str(status['id'])+'"'), unicode(status['created_at']), unicode(status['text'])) for status in data[0][u'data']]
                 print status_texts
                 save_csv(filepath, status_texts, header=[u'id', u'created_at', u'text'])
-                
+            if data[0][u'qname'] == "Twitter List Members":
+                members = [(m['id'],m['screen_name'],m['name'],m['location'],m['description'],m['created_at'],m['friends_count'],m['followers_count'],m['statuses_count'],m['favourites_count']) for m in data[0][u'data']]
+                members = [[unicode(m) for m in member] for member in members]
+                print members
+                save_csv(filepath, members, header=['id','screen_name','name','location','description','created_at','friends_count','followers_count','statuses_count','favourites_count'])
+
     #print os.path.getsize(filepath)    
     return filename, "/download/"+filename, os.path.getsize(filepath)
 

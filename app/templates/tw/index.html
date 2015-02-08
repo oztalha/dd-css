@@ -16,11 +16,15 @@
     <div class="list-group">
        <a href="{{ url_for('tw.friends_followers') }}" class="list-group-item">
          <h4 class="list-group-item-heading">Get IDs of Friends and Followers</h4>
-         <p class="list-group-item-text">You can download up to 75K IDs in a second</p>
+         <p class="list-group-item-text">Download up to 75K IDs in a second to make further analysis</p>
        </a>
       <a href="{{ url_for('tw.user_timeline') }}" class="list-group-item">
          <h4 class="list-group-item-heading">Get Tweets from User Timeline</h4>
-         <p class="list-group-item-text">You can download up to 3200 last tweets of a user</p>
+         <p class="list-group-item-text">Download up to 3200 last tweets of a user with a single click</p>
+       </a>
+      <a href="{{ url_for('tw.list_members') }}" class="list-group-item">
+         <h4 class="list-group-item-heading">Get Members of a Twitter List</h4>
+         <p class="list-group-item-text">Download valuable information about every member of a list</p>
        </a>
        <a href="#" class="list-group-item disabled">
          <h4 class="list-group-item-heading" style="color: #999999">New Features</h4>

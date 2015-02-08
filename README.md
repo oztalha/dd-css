@@ -14,10 +14,7 @@ In this project I highly benefitted from the books [Mining the Social Web](https
 * Obtain an OAuth access token on behalf of a Twitter user
 * Get the friends/followers list of a user as JSON/CSV file
 * Get last 3200 tweets of a user in JSON/CSV format
-
-### Facebook
-* Obtain an OAuth access token on behalf of a Facebook user
-* Get the number of shares of a url
+* Get IDs as well as many other information on the members of a Twitter list in JSON/CSV format
 
 ## Installation
 ---------------
@@ -25,4 +22,4 @@ In this project I highly benefitted from the books [Mining the Social Web](https
 After installing MongoDB, there is no need to create db or collection. The only configuration is to ensure indexing.
 * Index the queries by db.queries.ensureIndex({username:1, created_time:1, qname:1})
  
-[toz]: http://www.mli.gmu.edu/toz/wordpress
+[toz]: http://talhaoz.com

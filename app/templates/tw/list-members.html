@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import '_macros.html' as macros %}
+
+{% block title %}DD-CSS - Twitter{% endblock %}
+
+{% block page_content %}
+
+ {{ macros.form_in_panel(form,"Get Members of a Twitter List") }}
+ {{ macros.about_in_panel("About",
+      "You can download all the info on the members of a list",
+      "Information about the members of a Twitter list available in two formats. CSV files have 
+      <i>id, screen_name,name, location, description, created_at, friends_count (followed by), followers_count, statuses_count (tweet + retweet count), favourites_count</i> fields. JSON formatted files contain even more info.
+      <p>
+      To get it for all 100 of the US senators listed at <a href='https://twitter.com/gov/lists/us-senate/members' target='_blank'>twitter.com/gov/lists/us-senate</a>,
+      the text fields should be populated like the examples given in the paranthesis") }}
+
+{% endblock %}

@@ -7,7 +7,7 @@ from flask.ext.login import login_required
 from flask.ext.login import current_user
 from . import tw
 from .. import oauth
-from .forms import FollowersForm, UserTimelineForm
+from .forms import FollowersForm, UserTimelineForm, ListMembersForm
 import twitter as t
 import json
 from functools import partial
@@ -46,6 +46,61 @@ def before_request():
 def index():
     return render_template('tw/index.html')
 
+
+@tw.route('/list-members', methods=['GET', 'POST'])
+@login_required
+def list_members():
+    tweets = None
+    if g.user is not None:
+        form = ListMembersForm()
+        if form.validate_on_submit():
+            flash("Your request is received, you can download the results here when its completed")
+            
+            @copy_current_request_context
+            def get_list_members_async(owner_screen_name,slug):
+                twitter_api = oauth_login()
+                get_list_members(twitter_api,owner_screen_name=owner_screen_name,slug=slug)
+            
+            thr = Thread(target=get_list_members_async, args=[form.owner_screen_name.data, form.slug.data])
+            thr.start()
+            return redirect(url_for('main.user', username=current_user.username))
+    return render_template('tw/list-members.html', form=form)
+
+
+def get_list_members(twitter_api,owner_screen_name=None,slug=None):
+    # Must have both the owner_screen_name and slug
+    assert (owner_screen_name != None) and (slug != None), \
+    "Must have owner_screen_name or slug"
+
+    members = []
+    #ddcss.queries.ensureIndex( { username: 1 } )
+    ff = defaultdict()
+    ff['qname'] = 'Twitter List Members'
+    ff['created_time'] = datetime.now()
+    ff['username'] = current_user.username
+    ff['parameters'] = defaultdict()
+    ff['parameters']['owner_screen_name'] = owner_screen_name
+    ff['parameters']['slug'] = slug
+    ff['data'] = []
+
+    #https://dev.twitter.com/rest/reference/get/lists/members
+    list_members = partial(make_twitter_request, twitter_api.lists.members, count=5000)
+    cursor = -1
+    while cursor != 0:
+        # Use make_twitter_request via the partially bound callable...
+        response = list_members(owner_screen_name=owner_screen_name, slug=slug, cursor=cursor)
+
+        if response is not None:
+            ff['data'] += response['users']
+            cursor = response['next_cursor']
+            id = save_to_mongo(ff,"ddcss","queries")
+
+        print >> sys.stderr, 'Fetched {0} total {1} list members of {2}. next_cursor: {3}'.format(len(ff['data']), 
+                                                slug, owner_screen_name, cursor)
+# twitter_api = oauth_login()
+# res = twitter_api.lists.members(slug='us-senate',owner_screen_name='gov',cursor=-1)
+# for user in res['users']:
+#     print user['id'],user['screen_name'],user['name'],user['location'],user['created_at'],...
 
 
 @tw.route('/user-timeline', methods=['GET', 'POST'])

@@ -23,3 +23,11 @@ class UserTimelineForm(Form):
     max_results = IntegerField('Max Results (default 1000)',  default = 1000,
                     validators=[Optional(),NumberRange(min=0,max=3200,message="Number of followers should be between 0-3200")])
     submit = SubmitField('Get User\'s Tweets')
+
+class ListMembersForm(Form):
+    owner_screen_name = StringField('Owner Screen Name (e.g. gov)',
+            validators=[Required(), Length(1, 15), Regexp('[a-zA-Z0-9_]',
+                       0, "Not a valid screen name")])
+    slug = StringField('Slug (e.g. us-senate)',
+                validators=[Required(), Length(1, 15), Regexp('[a-zA-Z0-9_-]',0, "Not a valid slug")])
+    submit = SubmitField('Get List Members')
