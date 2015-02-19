@@ -29,5 +29,5 @@ class ListMembersForm(Form):
             validators=[Required(), Length(1, 15), Regexp('[a-zA-Z0-9_]',
                        0, "Not a valid screen name")])
     slug = StringField('Slug (e.g. us-senate)',
-                validators=[Required(), Length(1, 15), Regexp('[a-zA-Z0-9_-]',0, "Not a valid slug")])
+                validators=[Required(), Length(1, 50), Regexp('[a-zA-Z0-9_-]',0, "Not a valid slug")])
     submit = SubmitField('Get List Members')

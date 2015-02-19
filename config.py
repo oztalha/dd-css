@@ -7,9 +7,11 @@ class Config:
     SSL_DISABLE = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
-    MAIL_SERVER = 'smtp.googlemail.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
+    #MAIL_SERVER = 'localhost' #'mli.gmu.edu' #'smtp.office365.com' #'smtp.googlemail.com'
+    #MAIL_PORT = 587
+    #MAIL_USE_TLS = True
+    #MAIL_USE_SSL = True
+    MAIL_DEBUG = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     DD_CSS_MAIL_SUBJECT_PREFIX = '[DD-CSS]'
@@ -62,7 +64,7 @@ class ProductionConfig(Config):
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
-        """
+        """ 
         # email errors to the administrators
         import logging
         from logging.handlers import SMTPHandler
