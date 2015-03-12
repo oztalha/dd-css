@@ -11,6 +11,24 @@ import StringIO
 
 # -*- coding: utf-8 -*-
 
+def get_timeline_statuses(data):
+    stata = []
+    for status in data[0][u'data']:
+        row = []
+        row.append(status['id_str'])
+        row.append(status['created_at'])
+        row.append(status['text'])
+        row.append(status['retweet_count'])
+        try:
+            row.append(status['retweeted_status']['id_str'])
+            row.append(status['retweeted_status']['text'])
+            row.append(status['retweeted_status']['created_at'])
+            row.append(status['retweeted_status']['user']['id_str'])
+        except:
+            row.extend(['','',''])
+        stata.append([unicode(item) for item in row])
+    return stata
+
 def get_file_params(filebasename, fformat):
     filename = filebasename + "." + fformat 
     filepath = os.path.abspath(current_app.root_path)+"/../download/"+filename
@@ -29,13 +47,11 @@ def get_file_params(filebasename, fformat):
                 print data[0][u'data']
                 save_csv(filepath,[[k]+v for (k,v) in data[0][u'data'].iteritems()])
             if data[0][u'qname'] == "Twitter User Timeline":
-                status_texts = [ (unicode('"'+str(status['id'])+'"'), unicode(status['created_at']), unicode(status['text'])) for status in data[0][u'data']]
-                print status_texts
-                save_csv(filepath, status_texts, header=[u'id', u'created_at', u'text'])
+                status_texts = get_timeline_statuses(data) #print status_texts
+                save_csv(filepath, status_texts, header=['id', 'created_at', 'text','retweet_count','rt_id','rt_text','rt_created_at','rt_user_id'])
             if data[0][u'qname'] == "Twitter List Members":
                 members = [(m['id'],m['screen_name'],m['name'],m['location'],m['description'],m['created_at'],m['friends_count'],m['followers_count'],m['statuses_count'],m['favourites_count']) for m in data[0][u'data']]
-                members = [[unicode(m) for m in member] for member in members]
-                print members
+                members = [[unicode(m) for m in member] for member in members] #print members
                 save_csv(filepath, members, header=['id','screen_name','name','location','description','created_at','friends_count','followers_count','statuses_count','favourites_count'])
 
     #print os.path.getsize(filepath)    
